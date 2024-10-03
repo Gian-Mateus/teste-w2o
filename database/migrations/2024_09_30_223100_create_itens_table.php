@@ -21,6 +21,7 @@ return new class extends Migration
             $table->date('expiration_date');
             $table->timestamps();
             $table->string('sku');
+            $table->integer('quantity')->default(0);
         });
     }
 

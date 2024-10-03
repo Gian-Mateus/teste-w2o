@@ -6,19 +6,17 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class card extends Component
+class modal extends Component
 {
     /**
      * Create a new component instance.
      */
     public function __construct(
+        public string $action = "Salvar",
+        public string $actionForm,
+        public string $method = "POST",
+        public string $body,
         public string $title,
-        public string $description,
-        public string $img,
-        public string $price,
-        public string $category = '',
-        public string $urlEdit,
-        public string $urlDelete,
     )
     {
         //
@@ -29,6 +27,6 @@ class card extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.card');
+        return view('components.modal');
     }
 }

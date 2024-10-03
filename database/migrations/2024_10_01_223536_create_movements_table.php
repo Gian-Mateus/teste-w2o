@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('movements', function (Blueprint $table) {
             $table->id();
+            // 0 - entrada | 1 - saida
+            $table->tinyInteger('type');
             $table->timestamps();
         });
     }

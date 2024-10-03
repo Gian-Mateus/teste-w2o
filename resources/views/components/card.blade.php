@@ -9,8 +9,12 @@
         <h5>{{ $price }}</h5>
         {{-- Não por links, por botões de ação, editar e excluir --}}
         <div>
-            <button class="btn btn-primary">✏</button>
-            <button class="btn btn-danger">✖</button>
+            <a href="{{ $urlEdit }}" class="btn btn-primary"><x-svg.edit /></a>
+            <form action="{{ $urlDelete }}" method="POST" class="d-inline">
+                @csrf
+                @method('DELETE')
+                <button class="btn btn-danger"><x-svg.delete /></button>
+            </form>
         </div>
     </div>
 </div>
