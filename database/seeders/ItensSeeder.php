@@ -24,7 +24,7 @@ class ItensSeeder extends Seeder
                 'expiration_date' => '2025-12-01',
                 'created_at' => fake()->date(),
                 'updated_at' => fake()->date(),
-                'sku' => 'SKU-12345'
+                'sku' => fake()->uuid()
             ],
             [
                 // 'id' => fake()->id(),
@@ -36,7 +36,7 @@ class ItensSeeder extends Seeder
                 'expiration_date' => '2024-12-01',
                 'created_at' => fake()->date(),
                 'updated_at' => fake()->date(),
-                'sku' => 'SKU-67890'
+                'sku' => fake()->uuid()
             ],
             [
                 // 'id' => fake()->id(),
@@ -48,7 +48,7 @@ class ItensSeeder extends Seeder
                 'expiration_date' => '2025-03-22',
                 'created_at' => fake()->date(),
                 'updated_at' => fake()->date(),
-                'sku' => 'SKU-54321'
+                'sku' => fake()->uuid()
             ],
             [
                 // 'id' => fake()->id(),
@@ -60,7 +60,7 @@ class ItensSeeder extends Seeder
                 'expiration_date' => '2024-11-05',
                 'created_at' => fake()->date(),
                 'updated_at' => fake()->date(),
-                'sku' => 'SKU-98765'
+                'sku' => fake()->uuid()
             ],
             [
                 // 'id' => fake()->id(),
@@ -72,7 +72,7 @@ class ItensSeeder extends Seeder
                 'expiration_date' => '2025-06-30',
                 'created_at' => fake()->date(),
                 'updated_at' => fake()->date(),
-                'sku' => 'SKU-11111'
+                'sku' => fake()->uuid()
             ],
             [
                 // 'id' => fake()->id(),
@@ -84,7 +84,7 @@ class ItensSeeder extends Seeder
                 'expiration_date' => '2024-10-10',
                 'created_at' => fake()->date(),
                 'updated_at' => fake()->date(),
-                'sku' => 'SKU-22222'
+                'sku' => fake()->uuid()
             ],
             [
                 // 'id' => fake()->id(),
@@ -96,7 +96,7 @@ class ItensSeeder extends Seeder
                 'expiration_date' => '2025-01-28',
                 'created_at' => fake()->date(),
                 'updated_at' => fake()->date(),
-                'sku' => 'SKU-33333'
+                'sku' => fake()->uuid()
             ],
             [
                 // 'id' => fake()->id(),
@@ -108,7 +108,7 @@ class ItensSeeder extends Seeder
                 'expiration_date' => '2025-08-20',
                 'created_at' => fake()->date(),
                 'updated_at' => fake()->date(),
-                'sku' => 'SKU-44444'
+                'sku' => fake()->uuid()
             ],
             [
                 // 'id' => fake()->id(),
@@ -120,7 +120,7 @@ class ItensSeeder extends Seeder
                 'expiration_date' => '2024-07-17',
                 'created_at' => fake()->date(),
                 'updated_at' => fake()->date(),
-                'sku' => 'SKU-55555'
+                'sku' => fake()->uuid()
             ],
             [
                 // 'id' => fake()->id(),
@@ -132,7 +132,7 @@ class ItensSeeder extends Seeder
                 'expiration_date' => '2024-04-12',
                 'created_at' => fake()->date(),
                 'updated_at' => fake()->date(),
-                'sku' => 'SKU-66666'
+                'sku' => fake()->uuid()
             ]
         ];
 

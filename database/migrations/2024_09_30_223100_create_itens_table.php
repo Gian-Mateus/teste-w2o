@@ -18,10 +18,10 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->decimal('price', 10, 2);
             $table->string('image');
-            $table->date('expiration_date');
+            $table->date('expiration_date')->nullable();
             $table->timestamps();
-            $table->string('sku');
-            $table->integer('quantity')->default(0);
+            $table->uuid('sku')->unique();
+            // $table->integer('quantity')->default(0);
         });
     }
 

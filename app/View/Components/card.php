@@ -16,7 +16,8 @@ class card extends Component
         public string $description,
         public string $img,
         public string $price,
-        public string $category = '',
+        public string $category,
+        public string $expirationDate,
         public string $urlEdit,
         public string $urlDelete,
     )

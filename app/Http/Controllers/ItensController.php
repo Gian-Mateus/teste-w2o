@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreOrUpdateProductRequest;
 use App\Models\Categories;
 use App\Models\Itens;
 use Illuminate\Http\Request;
-use Illuminate\Support\Number;
+use Illuminate\Support\Facades\Storage;
 
 class ItensController extends Controller
 {
@@ -14,33 +15,29 @@ class ItensController extends Controller
         $itens = Itens::all()->toArray();
         // Tratando os dados
         foreach($itens as &$item){
-            // Formatando o preço para real
-            $item['price'] = Number::format($item['price'], locale: 'pt_BR');
             // Buscando o nome da categoria através do ID
-            $item['category_name'] = Categories::find($item['category_id'])->category_name;
+            $item['category_name'] = Categories::findOrFail($item['category_id'])->category_name;
             unset($item['category_id']);
         }
+
         // dd($itens);
         return view('products', ['itens' => $itens]);
     }
 
     
-    public function create()
-    {
-        $categories = Categories::all();
-        return view('create', ['categories' => $categories]);
+    public function create(){
+        $categories = Categories::all()->toArray();
+        return view('new-product', ['categories' => $categories]);
     }
 
-    public function store(Request $request)
+    public function store(StoreOrUpdateProductRequest $request)
     {
-        $item = new Itens();
-        $item->name = $request->input('name');
-        $item->description = $request->input('description');
-        $item->price = $request->input('price');
-        $item->category_id = $request->input('category_id');
-        $item->save();
-        return redirect()->route('produtos.index');
+        // Cria um novo item com os dados validados
+        Itens::create($request->validated());
+
+        return redirect()->route('produtos.index')->with('success', 'Produto criado com sucesso!');
     }
+
 
 
     public function show()
@@ -51,28 +48,38 @@ class ItensController extends Controller
 
 
     public function edit($id){
-        $item = Itens::find($id)->toArray();
+        $item = Itens::findOrFail($id)->toArray();
 
-            // Formatando o preço para real
-            $item['price'] = Number::format($item['price'],locale: 'pt_BR');
-            // Buscando o nome da categoria através do ID
-            $item['category_name'] = Categories::find($item['category_id'])->category_name;
-            unset($item['category_id']);
+        $categories = Categories::all()->toArray();
+        
+        // Buscando o nome da categoria através do ID
+        $item['category_name'] = Categories::findOrFail($item['category_id'])->category_name;
 
         // dd($item);
-        return view('edit-products', compact('item'));
+        return view('edit-products', ['item' => $item, 'categories' => $categories]);
     }
 
 
-    public function update(Request $request, $id)
+    public function update(StoreOrUpdateProductRequest $request, $id)
     {
-        $item = Itens::find($id);
-        $item->name = $request->input('name');
-        $item->description = $request->input('description');
-        $item->price = $request->input('price');
-        $item->category_id = $request->input('category_id');
-        $item->save();
-        return redirect()->route('produtos.index');
+        // Busca o item no banco de dados
+        $item = Itens::findOrFail($id);
+
+        // Atualiza os dados, mas mantém a imagem antiga se uma nova não for enviada
+        $data = $request->validated();
+
+        // Se uma nova imagem for enviada, atualiza o campo de imagem
+        if ($request->hasFile('image')) {
+            if(Storage::exists($item->image)){
+                Storage::delete($item->image);
+            }
+            $data['image'] = $request->file('image')->store('products');
+        }
+
+        // Atualiza o item com os dados enviados (mantendo os valores antigos para os campos não enviados)
+        $item->update($data);
+
+        return redirect()->route('produtos.index')->with('success', 'Produto atualizado com sucesso!');
     }
 
     public function destroy($id){
