@@ -13,7 +13,7 @@
                 </div>
                 <div class="mb-3 mt-2">
                     <label for="title-product" class="form-label">Título:</label>
-                    <input name="name" type="text" class="form-control" id="title-product" placeholder="Título do produto" value="{{ $item['name'] }}" required>
+                    <input name="name" type="text" class="form-control" id="title-product" placeholder="Título do produto" value="{{ $item['name'] }}">
                 </div>
                 <div class="mb-3">
                     <label for="description-product" class="form-label">Descrição:</label>
@@ -21,7 +21,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="category-product" class="form-label">Categoria:</label>
-                    <select class="form-select" aria-label="Escolha a categoria" name="category_id" id="category-product" required>
+                    <select class="form-select" aria-label="Escolha a categoria" name="category_id" id="category-product">
                         @foreach ($categories as $cat)
                             <option value="{{ $cat['id'] }}" {{ $cat['id'] == $item['category_id'] ? 'selected' : '' }}>{{ $cat['category_name'] }}</option>
                         @endforeach
@@ -29,15 +29,15 @@
                 </div>
                 <div class="mb-3">
                     <label for="price-product" class="form-label">Preço:</label>
-                    <input name="price" type="text" class="form-control" id="price-product" placeholder="R$ {{ $item['price'] }}" value="{{ $item['price'] }}">
+                    <input name="price" type="text" class="form-control" id="price-product" placeholder="{{ $item['price'] }}" value="{{ $item['price'] }}">
                 </div>
                 <div class="mb-3">
                     <label for="sku-product" class="form-label">SKU:</label>
-                    <input name="sku" type="text" class="form-control" id="sku-product" placeholder="{{ $item['sku'] }}" value="{{ $item['sku'] }}" required>
+                    <input name="sku" type="text" class="form-control" id="sku-product" placeholder="{{ $item['sku'] }}" value="{{ $item['sku'] }}">
                 </div>
                 <div class="mb-3">
                     <label for="date-product" class="form-label">Data de vencimento:</label>
-                    <input name="expiration_date" type="text" class="form-control" id="date-product" placeholder="{{ $item['expiration_date'] }}" value="{{ $item['expiration_date'] }}" required>
+                    <input name="expiration_date" type="text" class="form-control" id="date-product" placeholder="{{ $item['expiration_date'] }}" value="{{ $item['expiration_date'] }}">
                 </div>
                 <div class="mb-3">
                     <label for="formFile" class="form-label">Imagem:</label>
@@ -86,7 +86,7 @@
                 }, false);
             });
             $('#date-product').mask('00/00/0000');
-            $('#price-product').mask('R$ 000.000.000.000.000,00', {reverse: true});
+            $('#price-product').mask('000.000.000.000.000,00', {reverse: true});
         })()
     </script>
 @endsection

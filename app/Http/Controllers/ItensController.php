@@ -6,6 +6,7 @@ use App\Http\Requests\StoreOrUpdateProductRequest;
 use App\Models\Categories;
 use App\Models\Itens;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 
 class ItensController extends Controller
@@ -65,7 +66,7 @@ class ItensController extends Controller
         // Busca o item no banco de dados
         $item = Itens::findOrFail($id);
 
-        // Atualiza os dados, mas mantém a imagem antiga se uma nova não for enviada
+        // Atualiza os dados
         $data = $request->validated();
 
         // Se uma nova imagem for enviada, atualiza o campo de imagem
@@ -75,6 +76,14 @@ class ItensController extends Controller
             }
             $data['image'] = $request->file('image')->store('products');
         }
+
+        if(Carbon::createFromFormat('d/m/Y', $item->expiration_date)->format('Y-m-d') !=  $data['expiration_date']){
+            if($data['expiration_date'] > Carbon::now()){
+                $data['expiration_date'] = $data['expiration_date'];
+                $request->errors()->add('expiration_date', 'A nova data de expiração não pode ser retroativa.');
+            }
+        }
+        // dd(Carbon::createFromFormat('d/m/Y', $item->expiration_date)->format('Y-m-d'));
 
         // Atualiza o item com os dados enviados (mantendo os valores antigos para os campos não enviados)
         $item->update($data);

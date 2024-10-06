@@ -17,50 +17,90 @@ class StoreOrUpdateProductRequest extends FormRequest
         return true;
     }
 
-    protected function formatPriceTofloat($value)
+    /**
+     * Função auxiliar para formatar o preço para float (formato americano)
+     */
+    protected function formatPriceToFloat($value)
     {
-        $value = str_replace(['R$ ', ' '], [''], $value);
+        $value = str_replace('R$ ', '', $value);
+        $value = str_replace('.', '!', $value);
+        $value = str_replace([',', '!'], ['.', ''], $value);
+        $value = floatval(preg_replace("/[^-0-9\.]/", "", $value));
+        return $value;
+    }
 
-        $value = str_replace(',', '.', $value);
+    protected function prepareForValidation()
+    {
 
-        return (float) $value;
+        if ($this->filled('price')) {
+            $this->merge([
+                'price' => $this->formatPriceToFloat($this->price),
+            ]);
+        }
+
+        // Converte o campo de data para o formato americano
+        if ($this->filled('expiration_date')) {
+            $this->merge([
+                'expiration_date' => Carbon::createFromFormat('d/m/Y', $this->expiration_date)->format('Y-m-d'),
+            ]);
+        }
     }
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array{
-        $rules = [
-            'name' => 'required|string|max:55',
-            'description' => 'nullable|string',
-            // 'price' => 'required|string', // Validação como string para o tratamento de máscara
-            'category_id' => 'required|exists:categories,id',
-            'sku' => [
-                'required', 
-                'string', 
-                'max:100', 
-                Rule::unique('itens')->ignore($this->route('produto')), // Ignora SKU duplicado no update
-            ],
-            'expiration_date' => [
-                'nullable',
-                // 'date_format:d/m/Y', // Data no formato brasileiro na view
-                // Não colocamos a regra "after:today" aqui, será tratada no `withValidator()`
-            ],
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,svg,gif,webp|max:5120', // Máximo de 5MB, apenas JPEG e PNG
-        ];
+    public function rules(): array
+    {
 
-        // No caso de criar um novo produto, a imagem é obrigatória
-        if ($this->isMethod('post')) {
-            $rules['image'] = 'required|image|mimes:jpeg,png|max:5120';
+        $routeName = $this->route()->getName();
+
+        if($routeName === 'produtos.store'){
+            $rules = [
+                'name' => 'required|string|max:55',
+                'description' => 'nullable|string',
+                'price' => 'required|decimal:0', // Validação como string para o tratamento de máscara
+                'category_id' => 'required|exists:categories,id',
+                'sku' => [
+                    'required',
+                    'string',
+                    'max:100',
+                    Rule::unique('itens')->ignore($this->route('produto')), // Ignora SKU duplicado no update
+                ],
+                'expiration_date' => 'nullable|date_format:Y-d-m|after:today', // Data no formato dd/mm/yyyy e não pode ser retroativa
+                'image' => 'required|image|mimes:jpeg,png,jpg,svg,gif,webp|max:5120', // Máximo de 5MB, apenas JPEG e PNG
+            ];
+
+            return $rules;
+
+        }elseif($routeName === 'produtos.update'){
+
+            $rules = [
+                'name' => 'nullable|string|max:55',
+                'description' => 'nullable|string',
+                'price' => 'nullable|decimal:0', // Validação como string para o tratamento de máscara
+                'category_id' => 'nullable|exists:categories,id',
+                'sku' => [
+                    'nullable',
+                    'string',
+                    'max:100',
+                    Rule::unique('itens')->ignore($this->route('produto')), // Ignora SKU duplicado no update
+                ],
+                'expiration_date' => [
+                    'nullable'
+                ], 
+                // 'expiration_date' => [
+                //     'nullable|date_format:Y-d-m|after:today'
+                // ], // Data no formato dd/mm/yyyy e não pode ser retroativa
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,svg,gif,webp|max:5120', // Máximo de 5MB, apenas JPEG e PNG
+            ];
+            return $rules;
+
         }
-
-
-
-        return $rules;
     }
 
+    /**
+     * Customiza as mensagens de erro (opcional).
+     */
     public function messages()
     {
         return [
@@ -73,59 +113,33 @@ class StoreOrUpdateProductRequest extends FormRequest
         ];
     }
 
+    /**
+     * Preparação da validação para manipular a requisição antes de validar
+     */
 
-    // protected function prepareForValidation()
+    // protected function withValidator($validator)
     // {
-    //     // Converte o campo de preço (com máscara) para o formato float
-    //     if ($this->filled('price')) {
-    //         $this->merge([
-    //             'price' => $this->formatPriceTofloat($this->price),
-    //         ]);
-    //     }
+    //     $routeName = $this->route()->getName();
+    //     if($routeName === 'produtos.update'){
 
-    //     // Converte o campo de data de dd/mm/yyyy para yyyy-mm-dd (padrão ISO para o banco de dados)
-    //     if ($this->filled('expiration_date')) {
-    //         $this->merge([
-    //             'expiration_date' => Carbon::createFromFormat('d/m/Y', $this->expiration_date)->format('Y-m-d'),
-    //         ]);
+    //         // Recupera o ID do produto da rota
+    //         $produtoId = $this->route('produtos'); // Isso deve ser o ID do produto
+            
+    //         // Recupera o produto do banco de dados pelo ID
+    //         $produto = Itens::find($produtoId);
+            
+    //         if($this->filled('expiration_date')) {
+    //             // Pega a data de expiração atual do banco de dados (formato Y-m-d)
+    //             $currentExpirationDate = $produto->expiration_date;
+                
+    //             // Verifica se a data enviada é diferente da data atual no banco
+    //             if ($this->expiration_date != $currentExpirationDate) {
+    //                 // Se for diferente, verifica se a nova data é retroativa (anterior à data atual)
+    //                 if (Carbon::parse($this->expiration_date)->isBefore(Carbon::now())) {
+    //                     $validator->errors()->add('expiration_date', 'A nova data de expiração não pode ser retroativa.');
+    //                 }
+    //             }
+    //         }
     //     }
     // }
-
-    protected function withValidator($validator){
-
-        // Recupera o ID do produto da rota
-        $produtoId = $this->route('produto'); // Isso deve ser o ID do produto
-
-        // Recupera o produto do banco de dados pelo ID
-        $produto = Itens::find($produtoId);
-
-        // Recupera o produto da rota
-        if ($produto && $this->filled('expiration_date')) {
-            // Pega a data de expiração atual do banco de dados (formato Y-m-d)
-            $currentExpirationDate = $produto->expiration_date;
-
-            // Verifica se a data enviada é diferente da data atual no banco
-            if ($this->expiration_date != $currentExpirationDate) {
-                // Se for diferente, verifica se a nova data é retroativa (anterior à data atual)
-                if (Carbon::parse($this->expiration_date)->isBefore(Carbon::now())) {
-                    $validator->errors()->add('expiration_date', 'A nova data de expiração não pode ser retroativa.');
-                }
-            }
-        }
-
-        // Converte o campo de preço (com máscara) para o formato float
-        if ($this->filled('price')) {
-            $this->merge([
-                'price' => $this->formatPriceTofloat($this->price),
-            ]);
-        }
-
-        // Converte o campo de data de dd/mm/yyyy para yyyy-mm-dd (padrão ISO para o banco de dados)
-        if ($this->filled('expiration_date')) {
-            $this->merge([
-                'expiration_date' => Carbon::createFromFormat('d/m/Y', $this->expiration_date)->format('Y-m-d'),
-            ]);
-        }
-    }
-
 }
