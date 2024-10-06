@@ -77,18 +77,20 @@ class ItensController extends Controller
             $data['image'] = $request->file('image')->store('products');
         }
 
-        if(Carbon::createFromFormat('d/m/Y', $item->expiration_date)->format('Y-m-d') !=  $data['expiration_date']){
-            if($data['expiration_date'] > Carbon::now()){
-                $data['expiration_date'] = $data['expiration_date'];
-                $request->errors()->add('expiration_date', 'A nova data de expiração não pode ser retroativa.');
-            }
-        }
+        dd($data['expiration_date'], $item->expiration_date);
+        // if(Carbon::createFromFormat('d/m/Y', $item->expiration_date)->format('Y-m-d') ==  $data['expiration_date']){
+        //     $data['expiration_date'] = $data['expiration_date']; // não sei se preciso fazer isso na verdade, pois se forem iguais ele faz o update da data normalmente
+        // }elseif(Carbon::createFromFormat('d/m/Y', $data['expiration_date'])->format('Y-m-d') > Carbon::now()){
+        //     // $data['expiration_date'] = $data['expiration_date'];
+
+        //     $request->errors()->add('expiration_date', 'A nova data de expiração não pode ser retroativa.');
+        // }
         // dd(Carbon::createFromFormat('d/m/Y', $item->expiration_date)->format('Y-m-d'));
 
         // Atualiza o item com os dados enviados (mantendo os valores antigos para os campos não enviados)
-        $item->update($data);
+        // $item->update($data);
 
-        return redirect()->route('produtos.index')->with('success', 'Produto atualizado com sucesso!');
+        // return redirect()->route('produtos.index')->with('success', 'Produto atualizado com sucesso!');
     }
 
     public function destroy($id){
