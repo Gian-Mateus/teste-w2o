@@ -1,11 +1,14 @@
 <?php
 
+use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\ItensController;
+use App\Http\Controllers\MovementController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('home');
 });
 
-// Route::get('/produtos', [ItensController::class, 'index'])->name('produtos');
 Route::resource('produtos', ItensController::class);
+Route::resource('movimentacao', MovementController::class);
+Route::resource('categorias', CategoriesController::class);

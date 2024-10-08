@@ -28,7 +28,7 @@
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label for="price-product" class="form-label">Preço:</label>
+                    <label for="price-product" class="form-label">Preço (R$):</label>
                     <input name="price" type="text" class="form-control" id="price-product" placeholder="{{ $item['price'] }}" value="{{ $item['price'] }}">
                 </div>
                 <div class="mb-3">
@@ -42,8 +42,8 @@
                 <div class="mb-3">
                     <label for="formFile" class="form-label">Imagem:</label>
                     <input name="image" class="form-control" type="file" id="formFile">
-                    <div class="mt-3 position-relative">
-                        <small class="position-absolute">Imagem Atual</small>
+                    <div class="mt-3 d-flex flex-column">
+                        <small class="">Imagem Atual</small>
                         <img src="{{ url('storage/'.$item['image']) }}" class="img-fluid w-25" alt="Imagem atual">
                     </div>
                 </div>

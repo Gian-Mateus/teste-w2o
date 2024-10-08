@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('item_id')->constrained('itens', 'id');
             // 0 - entrada | 1 - saida
             $table->tinyInteger('type');
-            // $table->integer('quantity');
+            $table->integer('quantity');
             $table->timestamps();
         });
     }

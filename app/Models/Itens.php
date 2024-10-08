@@ -24,7 +24,7 @@ class Itens extends Model
     public function getPriceAttribute($value)
     {
         // Formata o preço como R$ 000.000.000.000.000,00
-        return 'R$ ' . number_format($value, 2, ',', '.');
+        return number_format($value, 2, ',', '.');
     }
 
     // Mutator para formatar a data de vencimento

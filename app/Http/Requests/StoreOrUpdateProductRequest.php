@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Itens;
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Number;
 use Illuminate\Validation\Rule;
 
 class StoreOrUpdateProductRequest extends FormRequest
@@ -22,7 +22,7 @@ class StoreOrUpdateProductRequest extends FormRequest
      */
     protected function formatPriceToFloat($value)
     {
-        $value = str_replace('R$ ', '', $value);
+        // $value = str_replace('R$ ', '', $value);
         $value = str_replace('.', '!', $value);
         $value = str_replace([',', '!'], ['.', ''], $value);
         $value = floatval(preg_replace("/[^-0-9\.]/", "", $value));
@@ -58,7 +58,7 @@ class StoreOrUpdateProductRequest extends FormRequest
             $rules = [
                 'name' => 'required|string|max:55',
                 'description' => 'nullable|string',
-                'price' => 'required|decimal:0', // Validação como string para o tratamento de máscara
+                'price' => 'required|decimal:2',
                 'category_id' => 'required|exists:categories,id',
                 'sku' => [
                     'required',
@@ -66,7 +66,7 @@ class StoreOrUpdateProductRequest extends FormRequest
                     'max:100',
                     Rule::unique('itens')->ignore($this->route('produto')), // Ignora SKU duplicado no update
                 ],
-                'expiration_date' => 'nullable|date_format:Y-d-m|after:today', // Data no formato dd/mm/yyyy e não pode ser retroativa
+                'expiration_date' => 'nullable|date_format:Y-m-d|after:today', // Data no formato dd/mm/yyyy e não pode ser retroativa
                 'image' => 'required|image|mimes:jpeg,png,jpg,svg,gif,webp|max:5120', // Máximo de 5MB, apenas JPEG e PNG
             ];
 
@@ -112,34 +112,4 @@ class StoreOrUpdateProductRequest extends FormRequest
             'image.max' => 'A imagem não pode ser maior que 5MB.',
         ];
     }
-
-    /**
-     * Preparação da validação para manipular a requisição antes de validar
-     */
-
-    // protected function withValidator($validator)
-    // {
-    //     $routeName = $this->route()->getName();
-    //     if($routeName === 'produtos.update'){
-
-    //         // Recupera o ID do produto da rota
-    //         $produtoId = $this->route('produtos'); // Isso deve ser o ID do produto
-            
-    //         // Recupera o produto do banco de dados pelo ID
-    //         $produto = Itens::find($produtoId);
-            
-    //         if($this->filled('expiration_date')) {
-    //             // Pega a data de expiração atual do banco de dados (formato Y-m-d)
-    //             $currentExpirationDate = $produto->expiration_date;
-                
-    //             // Verifica se a data enviada é diferente da data atual no banco
-    //             if ($this->expiration_date != $currentExpirationDate) {
-    //                 // Se for diferente, verifica se a nova data é retroativa (anterior à data atual)
-    //                 if (Carbon::parse($this->expiration_date)->isBefore(Carbon::now())) {
-    //                     $validator->errors()->add('expiration_date', 'A nova data de expiração não pode ser retroativa.');
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
 }

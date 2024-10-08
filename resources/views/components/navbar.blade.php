@@ -8,13 +8,16 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="/produtos">Produtos</a>
+                    <a class="nav-link" aria-current="page" href="{{ route('produtos.index') }}">Produtos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Movimentações</a>
+                    <a class="nav-link" href="#">Entradas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Categorias</a>
+                    <a class="nav-link" href="#">Saidas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('categorias.index') }}">Categorias</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Relatórios</a>

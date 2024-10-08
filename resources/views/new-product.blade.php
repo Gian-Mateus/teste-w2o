@@ -76,7 +76,9 @@
                 }, false);
             });
             $('#date-product').mask('00/00/0000');
-            $('#price-product').mask('000.000.000.000.000,00', {reverse: true});
+            $('#price-product').mask('000.000.000.000.000,00', {
+                reverse: true
+            });
         })()
 </script>
 @endsection
