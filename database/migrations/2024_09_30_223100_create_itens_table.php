@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name', 55);
             $table->foreignId('category_id')->constrained('categories', 'id');
             $table->text('description')->nullable();
-            $table->decimal('price', 10, 2);
+            $table->float('price', 2);
             $table->string('image');
             $table->date('expiration_date')->nullable();
             $table->timestamps();
