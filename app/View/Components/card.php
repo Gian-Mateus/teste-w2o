@@ -20,6 +20,7 @@ class card extends Component
         public string $expirationDate,
         public string $urlEdit,
         public string $urlDelete,
+        public string $stock = '0',
     )
     {
         //

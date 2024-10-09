@@ -39,7 +39,7 @@
             </div>
             <div class="mb-3">
                 <label for="date-product" class="form-label">Data de vencimento:</label>
-                <input type="text" class="form-control" id="date-product" name="expiration_date">
+                <input type="text" class="form-control" id="date-product" name="expiration_date" maxlength="10">
             </div>
             <div class="mb-3">
                 <label for="formFile" class="form-label">Imagem:</label>
@@ -59,9 +59,6 @@
     @endif
 </main>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
-
 <script>
     (() => {
             'use strict'
@@ -75,10 +72,29 @@
                     form.classList.add('was-validated');
                 }, false);
             });
-            $('#date-product').mask('00/00/0000');
-            $('#price-product').mask('000.000.000.000.000,00', {
-                reverse: true
-            });
         })()
+        const input = document.getElementById('price-product');
+        
+        input.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
+            value = (parseInt(value) / 100).toFixed(2) + ''; // Converte o valor para formato decimal
+            
+            // Adiciona o ponto de milhar
+            value = value.replace('.', ','); // Troca o ponto decimal por vírgula
+            value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Insere o ponto a cada milhar
+            
+            e.target.value = value; // Atualiza o valor do input
+        });
+        const inputData = document.getElementById('date-product');
+                
+        inputData.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, ''); // Remove caracteres que não são números
+            
+            // Aplica a máscara de data usando regex
+            value = value.replace(/(\d{2})(\d)/, '$1/$2'); // Coloca a barra após o dia
+            value = value.replace(/(\d{2})\/(\d{2})(\d)/, '$1/$2/$3'); // Coloca a barra após o mês
+            
+            e.target.value = value; // Atualiza o valor do input
+        });
 </script>
 @endsection

@@ -37,7 +37,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="date-product" class="form-label">Data de vencimento:</label>
-                    <input name="expiration_date" type="text" class="form-control" id="date-product" placeholder="{{ $item['expiration_date'] }}" value="{{ $item['expiration_date'] }}">
+                    <input maxlength="10" name="expiration_date" type="text" class="form-control" id="date-product" placeholder="{{ $item['expiration_date'] }}" value="{{ $item['expiration_date'] }}">
                 </div>
                 <div class="mb-3">
                     <label for="formFile" class="form-label">Imagem:</label>
@@ -69,9 +69,6 @@
         :actionForm="route('produtos.destroy', $item['id'])"
     />
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
-    
     <script>
         (() => {
             'use strict'
@@ -85,8 +82,27 @@
                     form.classList.add('was-validated');
                 }, false);
             });
-            $('#date-product').mask('00/00/0000');
-            $('#price-product').mask('000.000.000.000.000,00', {reverse: true});
         })()
+
+        const input = document.getElementById('price-product');
+        input.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, ''); 
+                value = (parseInt(value) / 100).toFixed(2) + ''; 
+                
+                value = value.replace('.', ','); 
+                value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+                
+                e.target.value = value; 
+        });
+
+        const inputData = document.getElementById('date-product');
+        inputData.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, ''); 
+                
+                value = value.replace(/(\d{2})(\d)/, '$1/$2'); 
+                value = value.replace(/(\d{2})\/(\d{2})(\d)/, '$1/$2/$3');
+                
+                e.target.value = value; 
+        });
     </script>
 @endsection

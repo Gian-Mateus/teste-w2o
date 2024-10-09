@@ -11,7 +11,7 @@
                 </div>
                 <p class="card-text">{{ $description }}</p>
                 <h5>{{ $price }}</h5>
-                <p class="card-text"><small class="text-body-secondary">Estoque: </small></p>
+                <p class="card-text"><small class="text-body-secondary">Estoque: {{ $stock }}</small></p>
                 <p class="card-text"><small class="text-body-secondary">Data de vencimento: {{ $expirationDate }}</small></p>
                 <div class="d-flex justify-content-end gap-3">
                     <a href="{{ $urlEdit }}" class="btn btn-primary">

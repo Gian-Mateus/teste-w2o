@@ -26,6 +26,7 @@
                             :expirationDate="$item['expiration_date']"
                             :urlEdit="route('produtos.edit', $item['id'])"
                             :urlDelete="route('produtos.destroy', $item['id'])"
+                            :stock="$item['stock']"
                         />
                     {{-- </div> --}}
                 @endforeach

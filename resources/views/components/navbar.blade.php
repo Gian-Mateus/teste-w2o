@@ -11,16 +11,13 @@
                     <a class="nav-link" aria-current="page" href="{{ route('produtos.index') }}">Produtos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Entradas</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Saidas</a>
+                    <a class="nav-link" href="{{ route('movimentacao.index') }}">Movimentações</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('categorias.index') }}">Categorias</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Relatórios</a>
+                    <a class="nav-link" href="{{ route('reports') }}">Relatórios</a>
                 </li>
             </ul>
         </div>
