@@ -10,21 +10,21 @@
     <script>
         var ctx = document.getElementById('topItemsChart').getContext('2d');
         var chart = new Chart(ctx, {
-            type: 'bar', // Tipo de gráfico (barra)
+            type: 'bar',
             data: {
-                labels: @json($labels), // Labels (nomes dos itens)
+                labels: @json($labels),
                 datasets: [{
                     label: 'Quantidade Vendida',
-                    data: @json($data), // Dados (quantidades vendidas)
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)', // Cor de fundo das barras
-                    borderColor: 'rgba(54, 162, 235, 1)', // Cor da borda das barras
+                    data: @json($data),
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)', 
                     borderWidth: 1
                 }]
             },
             options: {
                 scales: {
                     y: {
-                        beginAtZero: true // Inicia o eixo Y do gráfico em zero
+                        beginAtZero: true
                     }
                 }
             }
