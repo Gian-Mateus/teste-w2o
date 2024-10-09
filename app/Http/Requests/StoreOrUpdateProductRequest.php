@@ -4,7 +4,6 @@ namespace App\Http\Requests;
 
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Number;
 use Illuminate\Validation\Rule;
 
 class StoreOrUpdateProductRequest extends FormRequest
@@ -22,10 +21,9 @@ class StoreOrUpdateProductRequest extends FormRequest
      */
     protected function formatPriceToFloat($value)
     {
-        // $value = str_replace('R$ ', '', $value);
-        $value = str_replace('.', '!', $value);
-        $value = str_replace([',', '!'], ['.', ''], $value);
-        $value = floatval(preg_replace("/[^-0-9\.]/", "", $value));
+        $value = str_replace('.', '', $value);
+        $value = str_replace(',', '.', $value);
+        $value = floatval($value);
         return $value;
     }
 
@@ -77,7 +75,7 @@ class StoreOrUpdateProductRequest extends FormRequest
             $rules = [
                 'name' => 'nullable|string|max:55',
                 'description' => 'nullable|string',
-                'price' => 'nullable|decimal:0', // Validação como string para o tratamento de máscara
+                'price' => 'nullable|decimal:2', 
                 'category_id' => 'nullable|exists:categories,id',
                 'sku' => [
                     'nullable',

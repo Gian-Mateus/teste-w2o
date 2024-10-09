@@ -12,6 +12,7 @@ class Movement extends Model
     protected $fillable = [
         'type',
         'item_id',
+        'quantity',
     ];
 
 }
